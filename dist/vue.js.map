@@ -1,0 +1,1 @@
+{"version":3,"file":"vue.js","sources":["../src/index.js"],"sourcesContent":["function Vue() {\n  window.alert('哈')\n}\n\nexport default Vue\n"],"names":["Vue","window","alert"],"mappings":";;;;;;EAAA,SAASA,GAAGA,GAAG;EACbC,EAAAA,MAAM,CAACC,KAAK,CAAC,GAAG,CAAC,CAAA;EACnB;;;;;;;;"}
