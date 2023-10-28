@@ -4,8 +4,10 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Vue = factory());
 })(this, (function () { 'use strict';
 
-  function Vue() {
-    window.alert('哈');
+  function Vue(options) {
+    this.name = options.name;
+    this.age = options.age;
+    window.alert('实例化');
   }
 
   return Vue;
