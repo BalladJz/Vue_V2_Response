@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <input id="ipt" type="text" />
+  </body>
+  <script>
+    // 定义数据
+    // 实现数据的渲染
+    // 当视图发生改变数据发生改变
+    // 当数据发生改变 视图更新
+
+    const data = {
+      name: 'BalladJz',
+    }
+
+    document.querySelector('#ipt').value = data.name
+
+    document.getElementById('ipt').addEventListener('input', (e) => {
+      data.name = e.target.value
+    })
+
+    function update(val) {
+      document.querySelector('#ipt').value = val
+    }
+
+    function defineReactive(obj, prop, val, cb) {
+      Object.defineProperty(obj, prop, {
+        get() {
+          console.log('get => 获取数据')
+          return val
+        },
+        set(value) {
+          console.log('set => 监听到数据变化了 =>  ', value)
+          val = value
+          cb(val)
+        },
+      })
+    }
+  
+    defineReactive(data, 'name', data['name'], update)
+  </script>
+</html>
