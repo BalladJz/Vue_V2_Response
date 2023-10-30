@@ -1,78 +1,36 @@
+import { observe } from './observer/index'
+
 function Vue(options) {
-  // // const vm = this
+  // const vm = this
   this.$options = options
 
-  // 代理options.data
-  // options.data可能是函数，也可能是一个对象
-  this._data =
-    typeof options.data === 'function' ? options.data() : options.data
-
-  // 实现数据的响应式（双向绑定）
-  // Object.keys(this._data).forEach((key) => {
-  //   let val = undefined
-  //   let cb = undefined
-  //   Object.defineProperty(this._data, key, {
-  //     get() {
-  //       console.log('get => 获取数据', val)
-  //       return val
-  //     },
-  //     set(value) {
-  //       console.log('set => 更新数据', value)
-  //       val = value
-  //       cb ? cb(val) : null
-  //     },
-  //   })
-  // })
-  observe(this._data)
-
-  // 定义 代理的方法
-  // 将Vue实例上的操作，代理到Vue._data上
-  // Object.keys(this._data).forEach((key) => {
-  //   Object.defineProperty(this, key, {
-  //     get() {
-  //       return this._data[key]
-  //     },
-  //     set(value) {
-  //       this._data[key] = value
-  //     },
-  //   })
-  // })
-
-  _proxy.call(this, this._data)
+  // 代理options.data  options.data可能是函数，也可能是一个对象
+  this.proxy_data = typeof options.data === 'function' ? options.data() : options.data
+  // 实现数据的响应式（双向绑定） 传入需要实现响应式的数据
+  observe(this.proxy_data)
+  // 代理的方法
+  // ! .call(this, 
+  _proxy.call(this, this.proxy_data)
 }
 
-// 定义代理的方法
+/**
+ * 代理Vue中的数据，通过实例可直接访问 vm.XXX 或 this.XXX
+ * @param {*} data 要代理的数据
+ */
 function _proxy(data) {
+  // 遍历需要代理的数据
   Object.keys(data).forEach((key) => {
+    // 通过 Object.defineProperty() 方法给每一个数据实现可以通过 vm.XXX 或 this.XXX 可以获取和设置
     Object.defineProperty(this, key, {
       get() {
-        return this._data[key]
+        console.log('_proxy => get 获取')
+        return this.proxy_data[key]
       },
       set(value) {
-        this._data[key] = value
+        console.log('_proxy => set 设置')
+        this.proxy_data[key] = value
       },
     })
-  })
-}
-
-// 定义响应式数据
-function observe(value, cb) {
-  Object.keys(value).forEach((key) => {
-    defineReactive(value, key, value[key], cb)
-  })
-}
-
-function defineReactive(obj, key, val, cb) {
-  Object.defineProperty(obj, key, {
-    get: () => {
-      console.log('get => 获取数据', val)
-      return val
-    },
-    set: (value) => {
-      console.log('set => 更新数据', value)
-      val = value
-      cb ? cb(value) : null
-    },
   })
 }
 
