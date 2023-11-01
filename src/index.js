@@ -1,4 +1,5 @@
 import { observe } from './observer/index'
+import { Watcher } from './observer/watcher.js'
 
 /**
  * 代理Vue中的数据，通过实例可直接访问 vm.XXX 或 this.XXX
@@ -32,6 +33,11 @@ function Vue(options) {
   // 代理的方法
   // ! .call(this, 
   _proxy.call(this, this.proxy_data)
+
+  // this表示Vue的 ？？？
+  new Watcher(this, 'a', () => {
+
+  })
 }
 
 export default Vue

@@ -9,7 +9,7 @@ class Dep {
     depend() {
         console.log('Dep类 depend =>  收集依懒')
     }
-    notify() {
+    notify(newValue) {
         console.log('Dep类 depend =>  通知依懒')
     }
 }
