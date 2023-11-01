@@ -1,4 +1,6 @@
+import { Dep } from './dep.js'
 /** 定义observer 类 */
+
 
 /**
  * 实现响应式的方法
@@ -8,14 +10,21 @@
  * @param {*} cb 数据更新调用的回调函数
  */
 function defineReactive(obj, key, val, cb) {
+  const dep = new Dep()
   Object.defineProperty(obj, key, {
     get: () => {
       console.log('defineReactive get => 获取数据', val)
+      //  收集依赖
+      dep.depend()
+
       return val
     },
     set: (value) => {
       console.log('defineReactive set => 更新数据', value)
       val = value
+      // 通知依懒 (触发依懒的更新)
+      dep.notify(value) 
+
       cb ? cb(value) : null
     },
   })
@@ -26,7 +35,7 @@ function defineReactive(obj, key, val, cb) {
  *  1、添加响应式标志
  *  2、实现响应式
  */
-class observer {
+class Observer {
   constructor(value, cb) {
     //  给数据添加'__ob__'属性，且可以精确设置它能够被枚举，重写等
     Object.defineProperty(value, '__ob__', {
@@ -34,6 +43,10 @@ class observer {
       value: this,
       enumerable: false,
     })
+    // 因为 Observer 与 Dep 是关联的 所以在实例化Observer是要 new一个Dep
+    const dep = new Dep()
+
+
     // 调用类的方法成员，遍历数据 实现响应式
     this.walk(value, cb)
   }
@@ -59,9 +72,9 @@ function observe(value, cb = undefined) {
     ob = value.__ob__
   } else {
     // 判断 如果数据没有“__ob__”这个属性，则添加上
-    ob = new observer(value, cb)
+    ob = new Observer(value, cb)
   }
   return ob
 }
 
-export { observe, observer }
+export { observe, Observer }
