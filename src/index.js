@@ -11,11 +11,11 @@ function _proxy(data) {
     // 通过 Object.defineProperty() 方法给每一个数据实现可以通过 vm.XXX 或 this.XXX 可以获取和设置
     Object.defineProperty(this, key, {
       get() {
-        console.log('_proxy get => 获取')
+        console.log('_proxy get => 获取代理')
         return this.proxy_data[key]
       },
       set(value) {
-        console.log('_proxy set => 设置')
+        console.log('_proxy set => 设置代理')
         this.proxy_data[key] = value
       },
     })
@@ -34,10 +34,17 @@ function Vue(options) {
   // ! .call(this, 
   _proxy.call(this, this.proxy_data)
 
-  // this表示Vue的 ？？？
-  new Watcher(this, 'a', () => {
-
+  // this表示Vue的 实例
+  new Watcher(this, 'a', (newValue) => {
+    console.log('a发生改变', newValue)
   })
 }
+
+// // $watch方法的实现
+// Vue.prototype.$watch = function (key, cb) {
+//   // 实现watch 并执行回调
+//   const vm = this
+//   new Watcher(vm, key, cb)
+// }
 
 export default Vue

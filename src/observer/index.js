@@ -1,7 +1,6 @@
 import { Dep } from './dep.js'
 /** 定义observer 类 */
 
-
 /**
  * 实现响应式的方法
  * @param {*} obj 实现相应式的数据
@@ -45,7 +44,6 @@ class Observer {
     })
     // 因为 Observer 与 Dep 是关联的 所以在实例化Observer是要 new一个Dep
     const dep = new Dep()
-
 
     // 调用类的方法成员，遍历数据 实现响应式
     this.walk(value, cb)
